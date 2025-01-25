@@ -21,17 +21,17 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 1b) Dodajemy CSS, aby kontener główny zajmował 100% szerokości i wysokości
+# 1b) Minimalny CSS, aby kontener główny zajmował 100% szerokości i wysokości
 st.markdown(
     """
     <style>
-    html, body, .main {
+    html, body, .block-container {
         height: 100%;
         width: 100%;
         margin: 0;
         padding: 0;
     }
-    /* Dodatkowe style, aby uniknąć białych pasków */
+    /* Usuwamy dodatkowe paddingi */
     .block-container {
         padding-top: 0rem;
         padding-bottom: 0rem;
