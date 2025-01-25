@@ -22,7 +22,7 @@ st.markdown(
     max-width: 100%;
     margin: 0 auto;
 }
-    }
+    
     /* Możesz też manipulować innymi klasami, np. .css-18e3th9 w zależności od wersji Streamlit */
     </style>
     """,
