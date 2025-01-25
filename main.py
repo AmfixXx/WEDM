@@ -11,16 +11,17 @@ from io import StringIO
 import math
 
 # 1) Ustawiamy layout na 'centered' (strona nie będzie super-szeroka).
-st.set_page_config(layout="centered")
+st.set_page_config(layout="wide")
 
 # 2) Opcjonalnie możemy wstrzyknąć CSS, aby ograniczyć max-szerokość kontenera:
 st.markdown(
     """
     <style>
     /* Ograniczamy główny kontener do 1200px i wycentrowanie */
-    .main {
-        max-width: 1200px;
-        margin: 0 auto;
+  .main {
+    max-width: 100%;
+    margin: 0 auto;
+}
     }
     /* Możesz też manipulować innymi klasami, np. .css-18e3th9 w zależności od wersji Streamlit */
     </style>
