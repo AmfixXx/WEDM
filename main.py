@@ -13,22 +13,33 @@ import math
 # 1) Ustawiamy layout na 'wide' (strona rozciągnie się na całą szerokość ekranu).
 st.set_page_config(layout="wide")
 
-# 2) Opcjonalnie możemy wstrzyknąć CSS, aby ograniczyć max-szerokość kontenera:
-# Usuń lub skomentuj poniższy fragment CSS, jeśli nadal powoduje problemy
-# st.markdown(
-#     """
-#     <style>
-#     /* Ograniczamy główny kontener do szerokości 100% */
-#     .main {
-#         max-width: 100%;
-#         margin: 0 auto;
-#     }
-#     /* Możesz też manipulować innymi klasami,
-#        np. .css-18e3th9 w zależności od wersji Streamlit */
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
+# 1a) Dodajemy meta tag viewport dla responsywności
+st.markdown(
+    """
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    """,
+    unsafe_allow_html=True
+)
+
+# 1b) Dodajemy CSS, aby kontener główny zajmował 100% szerokości i wysokości
+st.markdown(
+    """
+    <style>
+    html, body, .main {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    /* Dodatkowe style, aby uniknąć białych pasków */
+    .block-container {
+        padding-top: 0rem;
+        padding-bottom: 0rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 sns.set(style="whitegrid")
 
@@ -381,9 +392,9 @@ def main():
 
         col1, col2 = st.columns(2)
         with col1:
-            wysokosc_val = st.number_input("Wysokość (mm):", min_value=0, value=30)
+            wysokosc_val = st.number_input("Wysokość (mm):", min_value=0.0, value=30.0)
         with col2:
-            dlugosc_val = st.number_input("Długość ścieżki (mm):", min_value=0, value=200)
+            dlugosc_val = st.number_input("Długość ścieżki (mm):", min_value=0.0, value=200.0)
 
         st.write("Zaznacz nastawy (E1..E5)")
         ccols = st.columns(5)
