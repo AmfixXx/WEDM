@@ -10,24 +10,25 @@ import re
 from io import StringIO
 import math
 
-# 1) Ustawiamy layout na 'centered' (strona nie będzie super-szeroka).
+# 1) Ustawiamy layout na 'wide' (strona rozciągnie się na całą szerokość ekranu).
 st.set_page_config(layout="wide")
 
 # 2) Opcjonalnie możemy wstrzyknąć CSS, aby ograniczyć max-szerokość kontenera:
-st.markdown(
-    """
-    <style>
-    /* Ograniczamy główny kontener do 1200px i wycentrowanie */
-  .main {
-    max-width: 100%;
-    margin: 0 auto;
-}
-    
-    /* Możesz też manipulować innymi klasami, np. .css-18e3th9 w zależności od wersji Streamlit */
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Usuń lub skomentuj poniższy fragment CSS, jeśli nadal powoduje problemy
+# st.markdown(
+#     """
+#     <style>
+#     /* Ograniczamy główny kontener do szerokości 100% */
+#     .main {
+#         max-width: 100%;
+#         margin: 0 auto;
+#     }
+#     /* Możesz też manipulować innymi klasami,
+#        np. .css-18e3th9 w zależności od wersji Streamlit */
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 
 sns.set(style="whitegrid")
 
@@ -274,7 +275,7 @@ def process_uploaded_file(file_content: bytes):
             row['Dlugosc (mm)'] = d_rounded
             row['ilosc_nastaw'] = 1
 
-            e_dict = {f"E{i}": 0 for i in range(1,11)}
+            e_dict = {f"E{i}": 0 for i in range(1,6)}  # Zmniejszenie do E1-E5
             pass_up = op['PassType'].upper()
             pass_pref = pass_up.split('_')[0]
             if pass_pref.startswith('E'):
@@ -288,7 +289,7 @@ def process_uploaded_file(file_content: bytes):
 
         input_df = pd.DataFrame(input_rows)
 
-        # Usuwamy E6..E10
+        # Usuwamy E6..E10 (jeśli jeszcze istnieją, choć teraz nie powinny)
         for i in range(6, 11):
             col = f"E{i}"
             if col in input_df.columns:
@@ -303,12 +304,13 @@ def process_uploaded_file(file_content: bytes):
         existing_cols = [c for c in display_cols if c in input_df.columns]
         input_df = input_df[existing_cols]
 
-        # Wyświetlamy tabelę na np. 1000px szerokości (i domyślną wysokość)
-        st.dataframe(input_df, width=1000)
+        # Wyświetlamy tabelę bez stałej szerokości
+        st.dataframe(input_df)
 
         return input_df
 
     except Exception as e:
+        st.error(f"Błąd podczas przetwarzania pliku: {e}")
         return None
 
 ###############################################################################
@@ -345,10 +347,10 @@ def main():
                         results_speed.insert(0, "Obróbka", range(1, len(results_speed)+1))
 
                         st.subheader("Wyniki - Czas [h m]")
-                        st.dataframe(results_time, width=1000)
+                        st.dataframe(results_time)
 
                         st.subheader("Wyniki - Prędkość [mm/min]")
-                        st.dataframe(results_speed, width=1000)
+                        st.dataframe(results_speed)
 
                         sums = []
                         for col in results_time.columns:
@@ -413,7 +415,7 @@ def main():
         exist_cols = [c for c in disp_cols if c in df_manual.columns]
         df_manual = df_manual[exist_cols]
 
-        st.dataframe(df_manual, width=1000)
+        st.dataframe(df_manual)
 
         if st.button("Szacuj czas obróbki"):
             with st.spinner("Przetwarzanie..."):
@@ -425,10 +427,10 @@ def main():
                 results_speed.insert(0, "Obróbka", range(1, len(results_speed)+1))
 
                 st.subheader("Wyniki - Czas [h m]")
-                st.dataframe(results_time, width=1000)
+                st.dataframe(results_time)
 
                 st.subheader("Wyniki - Prędkość [mm/min]")
-                st.dataframe(results_speed, width=1000)
+                st.dataframe(results_speed)
 
                 sums = []
                 for col_name in results_time.columns:
